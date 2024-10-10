@@ -18,10 +18,12 @@
 
 typedef struct {
   char* contents;
+  size_t reserved;
   size_t size;
 } o_string;
 
 extern int o_string_init(o_string*);
+extern int o_string_reserve(o_string*, size_t);
 extern int o_string_uninit(o_string*);
 
 extern int o_string_cat(o_string*, const char*);

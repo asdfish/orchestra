@@ -8,10 +8,17 @@ int o_string_init(o_string* o_string_p) {
 #endif
 
   o_string_p->size = 0;
+  o_string_p->reserved = 0;
   o_string_p->contents = (char*) malloc(sizeof(char));
 
   if(o_string_p->contents == NULL)
     return O_FAILURE_MALLOC;
+
+  return O_SUCCESS;
+}
+
+int o_string_reserve(o_string* o_string_p, size_t reservation) {
+  o_string_p->reserved = reservation;
 
   return O_SUCCESS;
 }
