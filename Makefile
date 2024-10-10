@@ -15,7 +15,7 @@ define COMPILE
 
 endef
 
-all: build liborchestra.a test
+all: build liborchestra.a
 
 build:
 	mkdir build
