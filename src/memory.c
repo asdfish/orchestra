@@ -14,6 +14,8 @@ int o_string_init(o_string* o_string_p) {
   if(o_string_p->contents == NULL)
     return O_FAILURE_MALLOC;
 
+  o_string_p->contents[0] = '\0';
+
   return O_SUCCESS;
 }
 
