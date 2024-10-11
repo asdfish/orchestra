@@ -1,4 +1,5 @@
 #include <orchestra_internal.h>
+#include <limits.h>
 #include <string.h>
 
 int o_string_cat(o_string* o_string_p, const char* new_contents) {
@@ -35,7 +36,9 @@ int o_string_delete(o_string* o_string_p, size_t index, size_t length) {
   if(o_string_realloc(o_string_p, contents_length - length) != O_SUCCESS)
     return O_FAILURE_REALLOC;
 
-  strcpy(o_string_p->contents + index, o_string_p->contents + index + length);
+  char* footer = o_string_p->contents + index + length;
+
+  memcpy(o_string_p->contents + index, footer, strlen(footer) + 1);
 
   return O_SUCCESS;
 }
@@ -53,8 +56,11 @@ int o_string_insert(o_string* o_string_p, size_t index, const char* insert) {
   if(o_string_realloc(o_string_p, insert_length) != O_SUCCESS)
     return O_FAILURE_REALLOC;
 
-  strcpy(o_string_p->contents + index + insert_length, o_string_p->contents + index);
-  strncpy(o_string_p->contents + index, insert, insert_length);
+  char* insert_location = o_string_p->contents + index;
+  size_t insert_location_length = strlen(insert_location);
+
+  memcpy(insert_location + insert_length, insert_location, insert_location_length);
+  memcpy(insert_location, insert, insert_length);
 
   return O_SUCCESS;
 }
