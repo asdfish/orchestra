@@ -52,5 +52,5 @@ ifneq (, $(wildcard test))
 	rm -f test
 endif
 
-run: all
+run: all test
 	valgrind --gen-suppressions=all ./test
