@@ -71,7 +71,6 @@ int o_string_replace_all(o_string* o_string_p, const char* query, const char* re
     return O_FAILURE_NULL_ARG;
 #endif
 
-  size_t contents_length = strlen(o_string_p->contents);
   size_t query_length = strlen(query);
   if(query_length == 0)
     return O_SUCCESS;
