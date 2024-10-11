@@ -75,6 +75,14 @@ int o_string_insert(o_string* o_string_p, size_t index, const char* insert);
 
 ---
 ~~~c
+int o_string_replace_all(o_string* o_string_p, const char* query, const char* replacement);
+~~~
+| Description                                       | Header                             | Implementation
+| ------------------------------------------------- | ---------------------------------- | ------------------------------------ |
+| Replaces all occurences of query with replacement | [orchestra.h](include/orchestra.h) | [manipulation.c](src/manipulation.c) |
+
+---
+~~~c
 int o_string_set(o_string* o_string_p, const char* new_contents);
 ~~~
 | Description                                        | Header                             | Implementation                       |

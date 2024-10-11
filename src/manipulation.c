@@ -65,6 +65,34 @@ int o_string_insert(o_string* o_string_p, size_t index, const char* insert) {
   return O_SUCCESS;
 }
 
+int o_string_replace_all(o_string* o_string_p, const char* query, const char* replacement) {
+#ifdef O_CHECK_NULL_ARGS
+  if(o_string_p == NULL || query == NULL || replacement == NULL)
+    return O_FAILURE_NULL_ARG;
+#endif
+
+  size_t contents_length = strlen(o_string_p->contents);
+  size_t query_length = strlen(query);
+  if(query_length == 0)
+    return O_SUCCESS;
+
+  if(strstr(o_string_p->contents, query) == NULL)
+    return O_SUCCESS;
+
+  char* contents_pointer = o_string_p->contents;
+  while((contents_pointer = strstr(contents_pointer, query)) != NULL) {
+    size_t index = contents_pointer - o_string_p->contents;
+    if(o_string_delete(o_string_p, index, query_length) != O_SUCCESS)
+      return O_FAILURE_REALLOC;
+    if(o_string_insert(o_string_p, index, replacement) != O_SUCCESS)
+      return O_FAILURE_REALLOC;
+
+    contents_pointer += query_length;
+  }
+
+  return O_SUCCESS;
+}
+
 int o_string_set(o_string* o_string_p, const char* new_contents) {
 #ifdef O_CHECK_NULL_ARGS
   if(o_string_p == NULL || new_contents == NULL)
