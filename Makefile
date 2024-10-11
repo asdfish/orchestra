@@ -7,7 +7,7 @@ TEST_OBJECT_FILES := build/test.c.o
 INCLUDE_FLAGS := -Iinclude
 
 DEBUG_FLAGS := -Wall -Wextra -Wpedantic
-OPTIMIZATION_FLAGS := -Og -g
+OPTIMIZATION_FLAGS := -O2 -march=native
 
 # setup
 define COMPILE
