@@ -1,4 +1,4 @@
-CC ?= gcc
+CC ?= cc
 C_STANDARD := -std=c11
 
 ORCHESTRA_OBJECT_FILES := build/internal.c.o build/manipulation.c.o build/memory.c.o
