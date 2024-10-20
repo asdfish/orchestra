@@ -1,56 +1,24 @@
 CC ?= cc
-C_STANDARD := -std=c11
+C_FLAGS := -std=c11 $\
+					 -Wall -Wextra -Wpedantic $\
+					 -O2 -march=native -pipe $\
+					 -Iinclude
 
-ORCHESTRA_OBJECT_FILES := build/internal.c.o build/manipulation.c.o build/memory.c.o
-TEST_OBJECT_FILES := build/test.c.o
+DIRECTORIES := build
 
-INCLUDE_FLAGS := -Iinclude
+OBJECT_FILES := build/internal.o build/manipulation.o build/memory.o
 
-DEBUG_FLAGS := -Wall -Wextra -Wpedantic
-OPTIMIZATION_FLAGS := -O2 -march=native
+all: ${DIRECTORIES} liborchestra.a
 
-# setup
-define COMPILE
-	${CC} ${C_STANDARD} -c $(1) ${INCLUDE_FLAGS} ${DEBUG_FLAGS} ${OPTIMIZATION_FLAGS} -o build/$(notdir $(1)).o
+${DIRECTORIES}:
+	-mkdir ${DIRECTORIES}
 
-endef
+${OBJECT_FILES}: build/%.o :src/%.c
+	${CC} -c $< ${C_FLAGS} -o $@
 
-all: build liborchestra.a
+liborchestra.a: ${OBJECT_FILES}
+	ar rcs liborchestra.a ${OBJECT_FILES}
 
-build:
-	mkdir build
-
-# liborchestra.a
-build/internal.c.o: include/* src/internal.c
-	$(call COMPILE,src/internal.c)
-
-build/manipulation.c.o: include/* src/manipulation.c
-	$(call COMPILE,src/manipulation.c)
-
-build/memory.c.o: include/* src/memory.c
-	$(call COMPILE,src/memory.c)
-
-liborchestra.a: ${ORCHESTRA_OBJECT_FILES}
-	ar rcs liborchestra.a ${ORCHESTRA_OBJECT_FILES}
-
-# test
-build/test.c.o: test.c
-	$(call COMPILE,test.c)
-
-test: liborchestra.a ${TEST_OBJECT_FILES}
-	${CC} ${TEST_OBJECT_FILES} -L. -lorchestra -o test
-
-# utils
 clean:
-ifneq (, $(wildcard build))
-	rm -rf build
-endif
-ifneq (, $(wildcard liborchestra.a))
-	rm -f liborchestra.a
-endif
-ifneq (, $(wildcard test))
-	rm -f test
-endif
-
-run: all test
-	valgrind --gen-suppressions=all ./test
+	-rm -rf ${DIRECTORIES}
+	-rm -f liborchestra.a
