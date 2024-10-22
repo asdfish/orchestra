@@ -1,5 +1,5 @@
 CC ?= cc
-C_FLAGS := -std=c11 $\
+C_FLAGS := -std=c99 $\
 					 -Wall -Wextra -Wpedantic $\
 					 -O2 -march=native -pipe $\
 					 -Iinclude
