@@ -22,6 +22,7 @@ extern int o_string_reserve(o_string* o_string_p, size_t reservation);
 extern int o_string_uninit(o_string* o_string_p);
 
 extern int o_string_cat(o_string* o_string_p, const char* new_contents);
+extern int o_string_clear(o_string* o_string_p);
 extern int o_string_delete(o_string* o_string_p, size_t index, size_t length);
 extern int o_string_insert(o_string* o_string_p, size_t index, const char* insert);
 extern int o_string_replace_all(o_string* o_string_p, const char* query, const char* replacement);

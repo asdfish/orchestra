@@ -22,6 +22,18 @@ int o_string_cat(o_string* o_string_p, const char* new_contents) {
   return O_SUCCESS;
 }
 
+int o_string_clear(o_string* o_string_p) {
+#ifdef O_CHECK_NULL_ARGS
+  if(o_string_p == NULL)
+    return O_FAILURE_NULL_ARG;
+#endif
+
+  if(o_string_realloc(o_string_p, 0) != O_SUCCESS)
+    return O_FAILURE_REALLOC;
+
+  return O_SUCCESS;
+}
+
 int o_string_delete(o_string* o_string_p, size_t index, size_t length) {
 #ifdef O_CHECK_NULL_ARGS
   if(o_string_p == NULL)
