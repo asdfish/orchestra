@@ -1,7 +1,7 @@
 #ifndef ORCHESTRA_H
 #define ORCHESTRA_H
 
-#define O_CHECK_NULL_ARGS
+/*#define O_CHECK_NULL_ARGS*/
 
 #ifdef O_CHECK_NULL_ARGS
 #define O_FAILURE_NULL_ARG -1
