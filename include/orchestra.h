@@ -3,14 +3,9 @@
 
 /*#define O_CHECK_NULL_ARGS*/
 
-#ifdef O_CHECK_NULL_ARGS
-#define O_FAILURE_NULL_ARG -1
-#define O_FAILURE_MALLOC -2
-#define O_FAILURE_REALLOC -3
-#else
 #define O_FAILURE_MALLOC -1
 #define O_FAILURE_REALLOC -2
-#endif
+#define O_FAILURE_NULL_ARG -3
 
 #define O_SUCCESS 0
 
