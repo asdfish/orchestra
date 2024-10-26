@@ -17,7 +17,8 @@ int o_string_cat(o_string* o_string_p, const char* new_contents) {
   if(o_string_realloc(o_string_p, contents_length + new_contents_length) != O_SUCCESS)
     return O_FAILURE_REALLOC;
 
-  strcpy(o_string_p->contents + contents_length, new_contents);
+  /*strcpy(o_string_p->contents + contents_length, new_contents);*/
+  strcat(o_string_p->contents, new_contents);
 
   return O_SUCCESS;
 }
@@ -30,6 +31,8 @@ int o_string_clear(o_string* o_string_p) {
 
   if(o_string_realloc(o_string_p, 0) != O_SUCCESS)
     return O_FAILURE_REALLOC;
+
+  o_string_p->contents[0] = '\0';
 
   return O_SUCCESS;
 }
