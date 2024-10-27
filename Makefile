@@ -1,7 +1,7 @@
 CC ?= cc
 C_FLAGS := -std=c99 $\
 					 -Wall -Wextra -Wpedantic $\
-					 -O2 -march=native -pipe $\
+					 -Og -g -march=native -pipe $\
 					 -Iinclude
 
 DIRECTORIES := build build/tests
@@ -20,8 +20,8 @@ build/%.o: src/%.c
 liborchestra.a: ${OBJECT_FILES}
 	ar rcs liborchestra.a ${OBJECT_FILES}
 
-test: ${TEST_OBJECT_FILES}
-	${CC} ${TEST_OBJECT_FILES} -o test
+test: liborchestra.a ${TEST_OBJECT_FILES}
+	${CC} ${TEST_OBJECT_FILES} -L. -lorchestra -o test
 
 clean:
 	-rm -rf ${DIRECTORIES}

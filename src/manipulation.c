@@ -68,13 +68,13 @@ int o_string_insert(o_string* o_string_p, size_t index, const char* insert) {
   if(insert_length == 0)
     return O_SUCCESS;
 
-  if(o_string_realloc(o_string_p, insert_length) != O_SUCCESS)
+  if(o_string_realloc(o_string_p, o_string_p->size + insert_length) != O_SUCCESS)
     return O_FAILURE_REALLOC;
 
   char* insert_location = o_string_p->contents + index;
   size_t insert_location_length = strlen(insert_location);
 
-  memcpy(insert_location + insert_length, insert_location, insert_location_length);
+  memcpy(insert_location + insert_length, insert_location, insert_location_length + 1);
   memcpy(insert_location, insert, insert_length);
 
   return O_SUCCESS;
