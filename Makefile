@@ -13,7 +13,7 @@ all: ${DIRECTORIES} liborchestra.a
 ${DIRECTORIES}:
 	-mkdir ${DIRECTORIES}
 
-${OBJECT_FILES}: build/%.o :src/%.c
+build/%.o :src/%.c
 	${CC} -c $< ${C_FLAGS} -o $@
 
 liborchestra.a: ${OBJECT_FILES}
