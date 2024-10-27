@@ -12,9 +12,11 @@ int o_string_realloc(o_string* o_string_p, size_t new_size) {
 
   size_t size = new_size <= o_string_p->reserved ? o_string_p->reserved : new_size;
 
-  void* result = realloc(o_string_p->contents, size + 1);
+  char* result = (char*) realloc(o_string_p->contents, size + 1);
   if(result == NULL)
     return O_FAILURE_REALLOC;
+
+  o_string_p->contents = result;
 
   o_string_p->size = size;
 

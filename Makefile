@@ -9,7 +9,7 @@ DIRECTORIES := build build/tests
 OBJECT_FILES := build/internal.o build/manipulation.o build/memory.o
 TEST_OBJECT_FILES := build/tests/main.o
 
-all: ${DIRECTORIES} liborchestra.a
+all: ${DIRECTORIES} liborchestra.a test
 
 ${DIRECTORIES}:
 	$(foreach DIRECTORY,$\
