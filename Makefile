@@ -4,10 +4,22 @@ C_FLAGS := -std=c99 $\
 					 -O2 -march=native -pipe $\
 					 -Iinclude
 
-OBJECT_FILES := build/internal.o build/manipulation.o build/memory.o
-TEST_OBJECT_FILES := build/tests/main.o
+OBJECT_FILES := $(patsubst src/%.c,$\
+										build/%.o,$\
+										$(shell find src -name '*.c' -not -path './src/tests/*'))
+TEST_OBJECT_FILES := $(patsubst src/%.c,$\
+											 build/%.o,$\
+											 $(shell find src/tests -name '*.c'))
 
-all: liborchestra.a test
+define REMOVE_LIST
+	$(foreach ITEM,$\
+		$(1),$\
+		$(if $(wildcard ${ITEM}),$\
+			$(shell rm ${ITEM})))
+
+endef
+
+all: liborchestra.a
 
 build/%.o: src/%.c
 	${CC} -c $< ${C_FLAGS} -o $@
@@ -19,8 +31,15 @@ test: liborchestra.a ${TEST_OBJECT_FILES}
 	${CC} ${TEST_OBJECT_FILES} -L. -lorchestra -o test
 
 clean:
+	$(call REMOVE_LIST,$\
+		${TEST_OBJECT_FILES})
+	$(call REMOVE_LIST,$\
+		${OBJECT_FILES})
+ifneq (, $(wildcard test))
+	rm test
+endif
 ifneq (, $(wildcard liborchestra.a))
-	rm -f liborchestra.a
+	rm liborchestra.a
 endif
 
 .PHONY: all clean
