@@ -1,3 +1,5 @@
-build
+*.o
+*.pch
+*.gch
 liborchestra.a
 test

@@ -4,20 +4,10 @@ C_FLAGS := -std=c99 $\
 					 -O2 -march=native -pipe $\
 					 -Iinclude
 
-DIRECTORIES := build build/tests
-
 OBJECT_FILES := build/internal.o build/manipulation.o build/memory.o
 TEST_OBJECT_FILES := build/tests/main.o
 
-all: ${DIRECTORIES} liborchestra.a test
-
-${DIRECTORIES}:
-	$(foreach DIRECTORY,$\
-		${DIRECTORIES},$\
-		$(if $(wildcard ${DIRECTORY}),,$\
-			$(shell mkdir ${DIRECTORY})$\
-		)$\
-	)
+all: liborchestra.a test
 
 build/%.o: src/%.c
 	${CC} -c $< ${C_FLAGS} -o $@
@@ -29,12 +19,6 @@ test: liborchestra.a ${TEST_OBJECT_FILES}
 	${CC} ${TEST_OBJECT_FILES} -L. -lorchestra -o test
 
 clean:
-	$(foreach DIRECTORY,$\
-		${DIRECTORIES},$\
-		$(if $(wildcard ${DIRECTORY}),$\
-			$(shell rm -rf ${DIRECTORY})$\
-		)$\
-	)
 ifneq (, $(wildcard liborchestra.a))
 	rm -f liborchestra.a
 endif
