@@ -4,6 +4,12 @@ C_FLAGS := -std=c99 $\
 					 -O2 -march=native -pipe $\
 					 -Iinclude
 
+PROCESSED_HEADER_FILES := $(subst .h,$\
+														$(if $(findstring clang,${CC}),$\
+															.h.pch,$\
+															.h.gch),$\
+														$(shell find include -name '*.h'))
+
 OBJECT_FILES := $(patsubst src/%.c,$\
 										build/%.o,$\
 										$(shell find src -name '*.c' -not -path './src/tests/*'))
@@ -24,13 +30,21 @@ all: liborchestra.a
 build/%.o: src/%.c
 	${CC} -c $< ${C_FLAGS} -o $@
 
-liborchestra.a: ${OBJECT_FILES}
+%.gch: %
+	${CC} -c $< ${C_FLAGS}
+
+%.pch: %
+	${CC} -c $< ${C_FLAGS}
+
+liborchestra.a: ${PROCESSED_HEADER_FILES} ${OBJECT_FILES}
 	ar rcs liborchestra.a ${OBJECT_FILES}
 
 test: liborchestra.a ${TEST_OBJECT_FILES}
 	${CC} ${TEST_OBJECT_FILES} -L. -lorchestra -o test
 
 clean:
+	$(call REMOVE_LIST,$\
+		${PROCESSED_HEADER_FILES})
 	$(call REMOVE_LIST,$\
 		${TEST_OBJECT_FILES})
 	$(call REMOVE_LIST,$\
