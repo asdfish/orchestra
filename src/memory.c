@@ -1,4 +1,4 @@
-#include <orchestra.h>
+#include <orchestra/orchestra.h>
 #include <stdlib.h>
 
 int o_string_init(o_string* o_string_p) {

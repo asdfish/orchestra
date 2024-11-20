@@ -1,4 +1,4 @@
-#include <orchestra.h>
+#include <orchestra/orchestra.h>
 #include <stdio.h>
 
 void test_init(void) {
