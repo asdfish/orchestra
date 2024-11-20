@@ -1,8 +1,8 @@
 CC ?= cc
-C_FLAGS := -std=c99 $\
-					 -Wall -Wextra -Wpedantic $\
-					 -O2 -march=native -pipe $\
-					 -Iinclude
+CFLAGS ?= -O2 -march=native -pipe
+COMMONFLAGS := -Wall -Wextra -Wpedantic $\
+							 -O2 -march=native -pipe $\
+							 -Iinclude
 
 # comment/uncomment to disable/enable
 # PROCESS_HEADER_FILES := yes
@@ -16,6 +16,9 @@ PROCESSED_HEADER_FILES := $(if ${PROCESS_HEADER_FILES},$\
 OBJECT_FILES := $(patsubst src/%.c,$\
 										build/%.o,$\
 										$(shell find src -name '*.c' -not -path './src/tests/*'))
+
+# uncomment/comment to enable/disable
+# BUILD_TEST := yes
 TEST_OBJECT_FILES := $(patsubst src/%.c,$\
 											 build/%.o,$\
 											 $(shell find src/tests -name '*.c'))
@@ -24,7 +27,7 @@ LIBORCHESTRA_REQUIREMENTS := ${PROCESSED_HEADER_FILES} ${OBJECT_FILES}
 TEST_REQUIREMENTS := liborchestra.a ${TEST_OBJECT_FILES}
 
 define COMPILE
-${CC} -c $(1) ${C_FLAGS} -o $(2)
+${CC} -c $(1) ${CFLAGS} ${COMMONFLAGS} -o $(2)
 endef
 define REMOVE
 $(if $(wildcard $(1)),$\
@@ -39,7 +42,7 @@ define REMOVE_LIST
 
 endef
 
-all: liborchestra.a
+all: liborchestra.a $(if ${BUILD_TEST},test)
 
 build/%.o: src/%.c
 	$(call COMPILE,$<,$@)
