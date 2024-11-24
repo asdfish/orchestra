@@ -1,7 +1,7 @@
 #include <orchestra/orchestra_internal.h>
 #include <stdlib.h>
 
-int o_string_realloc(o_string* o_string_p, size_t new_size) {
+int o_string_realloc(o_string* restrict o_string_p, size_t new_size) {
 #ifdef O_CHECK_NULL_ARGS
   if(o_string_p == NULL)
     return O_FAILURE_NULL_ARG;
