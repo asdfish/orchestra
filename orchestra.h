@@ -1,6 +1,97 @@
-#include <orchestra/orchestra_internal.h>
+#ifndef ORCHESTRA_H
+#define ORCHESTRA_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+/*#define O_CHECK_NULL_ARGS*/
+
+#define O_FAILURE_MALLOC -1
+#define O_FAILURE_REALLOC -2
+#define O_FAILURE_NULL_ARG -3
+
+#define O_SUCCESS 0
+
+#include <stddef.h>
+
+typedef struct {
+  char* contents;
+  size_t reserved;
+  size_t size;
+} o_string;
+
+extern int o_string_init(o_string* restrict o_string_p);
+extern int o_string_reserve(o_string* restrict o_string_p, size_t reservation);
+extern int o_string_uninit(o_string* restrict o_string_p);
+
+extern int o_string_cat(o_string* restrict o_string_p, const char* new_contents);
+extern int o_string_clear(o_string* restrict o_string_p);
+extern int o_string_delete(o_string* restrict o_string_p, size_t index, size_t length);
+extern int o_string_insert(o_string* restrict o_string_p, size_t index, const char* insert);
+extern int o_string_replace_all(o_string* restrict o_string_p, const char* query, const char* replacement);
+extern int o_string_set(o_string* restrict o_string_p, const char* new_contents);
+
+#ifdef ORCHESTRA_IMPLEMENTATION
 #include <limits.h>
+#include <stdlib.h>
 #include <string.h>
+
+static int o_string_realloc(o_string* restrict o_string_p, size_t new_size);
+
+static int o_string_realloc(o_string* restrict o_string_p, size_t new_size) {
+#ifdef O_CHECK_NULL_ARGS
+  if(o_string_p == NULL)
+    return O_FAILURE_NULL_ARG;
+#endif
+
+  if(new_size == o_string_p->size || (new_size <= o_string_p->reserved && o_string_p->size == o_string_p->reserved))
+    return O_SUCCESS;
+
+  size_t size = new_size <= o_string_p->reserved ? o_string_p->reserved : new_size;
+
+  char* result = (char*) realloc(o_string_p->contents, size + 1);
+  if(result == NULL)
+    return O_FAILURE_REALLOC;
+
+  o_string_p->contents = result;
+
+  o_string_p->size = size;
+
+  return O_SUCCESS;
+}
+
+int o_string_init(o_string* restrict o_string_p) {
+#ifdef O_CHECK_NULL_ARGS
+  if(o_string_p == NULL)
+    return O_FAILURE_NULL_ARG;
+#endif
+
+  o_string_p->size = 0;
+  o_string_p->reserved = 0;
+  o_string_p->contents = (char*) malloc(sizeof(char));
+
+  if(o_string_p->contents == NULL)
+    return O_FAILURE_MALLOC;
+
+  o_string_p->contents[0] = '\0';
+
+  return O_SUCCESS;
+}
+int o_string_reserve(o_string* restrict o_string_p, size_t reservation) {
+  o_string_p->reserved = reservation;
+
+  return O_SUCCESS;
+}
+int o_string_uninit(o_string* restrict o_string_p) {
+#ifdef O_CHECK_NULL_ARGS
+  if(o_string_p == NULL)
+    return O_FAILURE_NULL_ARG;
+#endif
+
+  free(o_string_p->contents);
+  return O_SUCCESS;
+}
 
 int o_string_cat(o_string* restrict o_string_p, const char* new_contents) {
 #ifdef O_CHECK_NULL_ARGS
@@ -22,7 +113,6 @@ int o_string_cat(o_string* restrict o_string_p, const char* new_contents) {
 
   return O_SUCCESS;
 }
-
 int o_string_clear(o_string* restrict o_string_p) {
 #ifdef O_CHECK_NULL_ARGS
   if(o_string_p == NULL)
@@ -36,7 +126,6 @@ int o_string_clear(o_string* restrict o_string_p) {
 
   return O_SUCCESS;
 }
-
 int o_string_delete(o_string* restrict o_string_p, size_t index, size_t length) {
 #ifdef O_CHECK_NULL_ARGS
   if(o_string_p == NULL)
@@ -57,7 +146,6 @@ int o_string_delete(o_string* restrict o_string_p, size_t index, size_t length) 
 
   return O_SUCCESS;
 }
-
 int o_string_insert(o_string* restrict o_string_p, size_t index, const char* insert) {
 #ifdef O_CHECK_NULL_ARGS
   if(o_string_p == NULL || insert == NULL)
@@ -79,7 +167,6 @@ int o_string_insert(o_string* restrict o_string_p, size_t index, const char* ins
 
   return O_SUCCESS;
 }
-
 int o_string_replace_all(o_string* restrict o_string_p, const char* query, const char* replacement) {
 #ifdef O_CHECK_NULL_ARGS
   if(o_string_p == NULL || query == NULL || replacement == NULL)
@@ -106,7 +193,6 @@ int o_string_replace_all(o_string* restrict o_string_p, const char* query, const
 
   return O_SUCCESS;
 }
-
 int o_string_set(o_string* restrict o_string_p, const char* new_contents) {
 #ifdef O_CHECK_NULL_ARGS
   if(o_string_p == NULL || new_contents == NULL)
@@ -124,3 +210,10 @@ int o_string_set(o_string* restrict o_string_p, const char* new_contents) {
   strcpy(o_string_p->contents, new_contents);
   return O_SUCCESS;
 }
+#endif // ORCHESTRA_IMPL
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+
+#endif // ORCHESTRA_H
