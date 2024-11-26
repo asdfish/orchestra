@@ -1,10 +1,6 @@
 #ifndef ORCHESTRA_H
 #define ORCHESTRA_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
 /*#define O_CHECK_NULL_ARGS*/
 
 #define O_FAILURE_MALLOC -1
@@ -211,9 +207,5 @@ int o_string_set(o_string* restrict o_string_p, const char* new_contents) {
   return O_SUCCESS;
 }
 #endif // ORCHESTRA_IMPL
-
-#ifdef __cplusplus
-}
-#endif // __cplusplus
 
 #endif // ORCHESTRA_H
